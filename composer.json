@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "AndreaLagaccia\\Brevo\\": "src"
+            "Alagaccia\\Brevo\\": "src"
         }
     },
     "extra": {
