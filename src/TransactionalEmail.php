@@ -1,8 +1,8 @@
 <?php
 
-namespace Alagaccia\Brevo;
+namespace AndreaLagaccia\Brevo;
 
-use Alagaccia\Brevo\Brevo;
+use AndreaLagaccia\Brevo\Brevo;
 use Illuminate\Support\Facades\DB;
 
 class TransactionalEmail extends Brevo

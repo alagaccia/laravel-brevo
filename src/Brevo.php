@@ -1,8 +1,8 @@
 <?php
 
-namespace Alagaccia\Brevo;
+namespace AndreaLagaccia\Brevo;
 
-class Sendinblue
+class Brevo
 {
     protected $api_key;
     protected $api_base_url;

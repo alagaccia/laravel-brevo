@@ -1,6 +1,6 @@
 <?php
 
-namespace Alagaccia\Brevo;
+namespace AndreaLagaccia\Brevo;
 
 use Illuminate\Support\ServiceProvider;
 

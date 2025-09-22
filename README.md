@@ -30,7 +30,7 @@ Laravel 5.4 and older needs to include `BrevoServiceProvider` in your `config/ap
     /*
      * Package Service Providers...
      */
-    Alagaccia\BrevoServiceProvider::class,
+    AndreaLagaccia\BrevoServiceProvider::class,
 ]
 ```
 
@@ -39,13 +39,13 @@ Laravel 5.4 and older needs to include `BrevoServiceProvider` in your `config/ap
 Run the following Artisan command in your terminal to copy the environment variables:
 
 ```
-php artisan vendor:publish --provider="Alagaccia\Brevo\BrevoServiceProvider"
+php artisan vendor:publish --provider="AndreaLagaccia\Brevo\BrevoServiceProvider"
 ```
 
 Choose the preference and press ENTER
 
 ```
-Provider: Alagaccia\Brevo\BrevoServiceProvider
+Provider: AndreaLagaccia\Brevo\BrevoServiceProvider
 ```
 
 Now you have a `config/brevo.php` config file, where you can set the API_KEY and your favorite LIST_ID.

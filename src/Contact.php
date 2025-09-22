@@ -1,9 +1,9 @@
 <?php
 
-namespace Alagaccia\Brevo;
+namespace AndreaLagaccia\Brevo;
 
 use Illuminate\Support\Facades\Http;
-use Alagaccia\Brevo\Brevo;
+use AndreaLagaccia\Brevo\Brevo;
 
 class Contact extends Brevo
 {

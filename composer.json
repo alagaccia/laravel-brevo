@@ -11,13 +11,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Alagaccia\\Brevo\\": "src"
+            "AndreaLagaccia\\Brevo\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Alagaccia\\Brevo\\BrevoServiceProvider"
+                "AndreaLagaccia\\Brevo\\BrevoServiceProvider"
             ]
         }
     },
