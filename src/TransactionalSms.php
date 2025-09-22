@@ -4,6 +4,8 @@ namespace AndreaLagaccia\Brevo;
 
 use AndreaLagaccia\Brevo\Brevo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class TransactionalSms extends Brevo
 {
@@ -18,6 +20,10 @@ class TransactionalSms extends Brevo
 
     public function send($number, $content, $tag = null)
     {
+        if (config('brevo.LOG_ENABLED')) {
+            Log::info("Sending SMS to {$number} with content: {$content}", ['tag' => $tag]);
+        }
+
         $method_url = $this->url;
 
         $data = [
