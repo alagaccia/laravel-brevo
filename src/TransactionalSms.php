@@ -97,7 +97,7 @@ class TransactionalSms extends Brevo
                 }
             }
 
-            return $res->object();
+            return $res;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
