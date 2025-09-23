@@ -79,11 +79,11 @@ class TransactionalSms extends Brevo
                             Log::info("Plan details", ['plan' => $plan]);
                         }
 
-                        if ($plan['type'] === 'sms') {
+                        if ($plan->type === 'sms') {
                             $res = DB::table($this->setting_table_name)
                                 ->where("{$this->setting_column_name}", "{$this->setting_sms_counter_column_name}")
                                 ->update([
-                                    "{$this->setting_sms_counter_value_name}" => $plan['credits'],
+                                    "{$this->setting_sms_counter_value_name}" => $plan->credits,
                                 ]);
 
                             if (config('brevo.LOG_ENABLED')) {
