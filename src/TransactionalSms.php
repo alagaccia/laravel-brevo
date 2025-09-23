@@ -73,6 +73,9 @@ class TransactionalSms extends Brevo
                     Log::info("Account response", ['response' => $response]);
                 }
                 if ($response->plan) {
+                    if (config('brevo.LOG_ENABLED')) {
+                        Log::info("Processing plan details", ['plans' => $response->plan]);
+                    }
                     foreach ($response->plan as $plan) {
 
                         if (config('brevo.LOG_ENABLED')) {
@@ -87,7 +90,7 @@ class TransactionalSms extends Brevo
                                 ]);
 
                             if (config('brevo.LOG_ENABLED')) {
-                                Log::info("SMS credits updated in the database.", ['credits' => $plan['credits']]);
+                                Log::info("SMS credits updated in the database.", ['credits' => $plan->credits]);
                             }
                         }
                     }
