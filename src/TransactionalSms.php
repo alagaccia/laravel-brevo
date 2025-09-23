@@ -47,6 +47,21 @@ class TransactionalSms extends Brevo
                     ->update([
                         "{$this->setting_sms_counter_value_name}" => $res->remaining_credit,
                     ]);
+            } else if (isset($this->setting_sms_counter_column_name)) {
+                $res = \Http::withHeaders($this->api_headers)->post($this->api_base_url . 'account');
+
+                $response = $res->object();
+                if ($response->plan) {
+                    foreach ($response->plan as $plan) {
+                        if ($plan['type'] === 'sms') {
+                            DB::table($this->setting_table_name)
+                                ->where("{$this->setting_column_name}", "{$this->setting_sms_counter_column_name}")
+                                ->update([
+                                    "{$this->setting_sms_counter_value_name}" => $plan['credits'],
+                                ]);
+                        }
+                    }
+                }
             }
 
             return $res->object();
