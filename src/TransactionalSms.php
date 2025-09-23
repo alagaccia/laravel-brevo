@@ -48,10 +48,15 @@ class TransactionalSms extends Brevo
                         "{$this->setting_sms_counter_value_name}" => $res->remaining_credit,
                     ]);
             } else if (isset($this->setting_sms_counter_column_name)) {
-                if (config('brevo.LOG_ENABLED')) {
-                    Log::info("Fetching SMS credits to update the counter.");
-                }
                 $url = $this->api_base_url . 'account';
+
+
+                if (config('brevo.LOG_ENABLED')) {
+                    Log::info("Fetching SMS credits to update the counter.", [
+                        'url' => $url,
+                        'headers' => $this->api_headers,
+                    ]);
+                }
 
                 try {
                     $res = \Http::withHeaders($this->api_headers)->post($url);
