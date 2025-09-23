@@ -51,7 +51,16 @@ class TransactionalSms extends Brevo
                 if (config('brevo.LOG_ENABLED')) {
                     Log::info("Fetching SMS credits to update the counter.");
                 }
-                $res = \Http::withHeaders($this->api_headers)->post($this->api_base_url . 'account');
+                $url = $this->api_base_url . 'account';
+
+                try {
+                    $res = \Http::withHeaders($this->api_headers)->post($url);
+                } catch (\Exception $e) {
+                    if (config('brevo.LOG_ENABLED')) {
+                        Log::error("Error fetching account details", ['error' => $e->getMessage()]);
+                    }
+                    return $e->getMessage();
+                }
 
                 $response = $res->object();
 
