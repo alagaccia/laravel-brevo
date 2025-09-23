@@ -59,7 +59,7 @@ class TransactionalSms extends Brevo
                 }
 
                 try {
-                    $res = \Http::withHeaders($this->api_headers)->post($url);
+                    $res = \Http::withHeaders($this->api_headers)->get($url);
                 } catch (\Exception $e) {
                     if (config('brevo.LOG_ENABLED')) {
                         Log::error("Error fetching account details", ['error' => $e->getMessage()]);
