@@ -41,7 +41,7 @@ class TransactionalSms extends Brevo
         try {
             $res = \Http::withHeaders($this->api_headers)->post($method_url, $data);
 
-            if ($this->setting_sms_counter_column_name) {
+            if (isset($res->remaining_credit, $this->setting_sms_counter_column_name)) {
                 DB::table($this->setting_table_name)
                     ->where("{$this->setting_column_name}", "{$this->setting_sms_counter_column_name}")
                     ->update([
