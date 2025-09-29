@@ -41,65 +41,68 @@ class TransactionalSms extends Brevo
         try {
             $res = \Http::withHeaders($this->api_headers)->post($method_url, $data);
 
-            if (isset($res->remaining_credit, $this->setting_sms_counter_column_name)) {
-                DB::table($this->setting_table_name)
-                    ->where("{$this->setting_column_name}", "{$this->setting_sms_counter_column_name}")
-                    ->update([
-                        "{$this->setting_sms_counter_value_name}" => $res->remaining_credit,
-                    ]);
-            } else if (isset($this->setting_sms_counter_column_name)) {
-                $url = $this->api_base_url . 'account';
-
-
-                if (config('brevo.LOG_ENABLED')) {
-                    Log::info("Fetching SMS credits to update the counter.", [
-                        'url' => $url,
-                        'headers' => $this->api_headers,
-                    ]);
-                }
-
-                try {
-                    $res = \Http::withHeaders($this->api_headers)->get($url);
-                } catch (\Exception $e) {
-                    if (config('brevo.LOG_ENABLED')) {
-                        Log::error("Error fetching account details", ['error' => $e->getMessage()]);
-                    }
-                    return $e->getMessage();
-                }
-
-                $response = $res->object();
-
-                if (config('brevo.LOG_ENABLED')) {
-                    Log::info("Account response", ['response' => $response]);
-                }
-                if ($response->plan) {
-                    if (config('brevo.LOG_ENABLED')) {
-                        Log::info("Processing plan details", ['plans' => $response->plan]);
-                    }
-                    foreach ($response->plan as $plan) {
-
-                        if (config('brevo.LOG_ENABLED')) {
-                            Log::info("Plan details", ['plan' => $plan]);
-                        }
-
-                        if ($plan->type === 'sms') {
-                            $res = DB::table($this->setting_table_name)
-                                ->where("{$this->setting_column_name}", "{$this->setting_sms_counter_column_name}")
-                                ->update([
-                                    "{$this->setting_sms_counter_value_name}" => $plan->credits,
-                                ]);
-
-                            if (config('brevo.LOG_ENABLED')) {
-                                Log::info("SMS credits updated in the database.", ['credits' => $plan->credits]);
-                            }
-                        }
-                    }
-                }
+            if (config('brevo.LOG_ENABLED')) {
+                Log::info("SMS send response", ['response' => $res->body()]);
             }
+
+            $this->checkCredits();
 
             return $res;
         } catch (\Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    public function checkCredits()
+    {
+        if (!isset($this->setting_sms_counter_column_name)) {
+            return null;
+        }
+
+        $url = $this->api_base_url . 'account';
+
+        if (config('brevo.LOG_ENABLED')) {
+            Log::info("Fetching SMS credits to update the counter.", [
+                'url' => $url,
+                'headers' => $this->api_headers,
+            ]);
+        }
+
+        try {
+            $res = \Http::withHeaders($this->api_headers)->get($url);
+        } catch (\Exception $e) {
+            if (config('brevo.LOG_ENABLED')) {
+                Log::error("Error fetching account details", ['error' => $e->getMessage()]);
+            }
+            return $e->getMessage();
+        }
+
+        $response = $res->object();
+
+        if (config('brevo.LOG_ENABLED')) {
+            Log::info("Account response", ['response' => $response]);
+        }
+        if ($response->plan) {
+            if (config('brevo.LOG_ENABLED')) {
+                Log::info("Processing plan details", ['plans' => $response->plan]);
+            }
+            foreach ($response->plan as $plan) {
+                if (config('brevo.LOG_ENABLED')) {
+                    Log::info("Plan details", ['plan' => $plan]);
+                }
+
+                if ($plan->type === 'sms') {
+                    $res = DB::table($this->setting_table_name)
+                        ->where("{$this->setting_column_name}", "{$this->setting_sms_counter_column_name}")
+                        ->update([
+                            "{$this->setting_sms_counter_value_name}" => $plan->credits,
+                        ]);
+
+                    if (config('brevo.LOG_ENABLED')) {
+                        Log::info("SMS credits updated in the database.", ['credits' => $plan->credits]);
+                    }
+                }
+            }
         }
     }
 }
