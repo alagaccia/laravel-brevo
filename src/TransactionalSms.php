@@ -47,7 +47,7 @@ class TransactionalSms extends Brevo
 
             $this->checkCredits();
 
-            return $res;
+            return $res->object();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
